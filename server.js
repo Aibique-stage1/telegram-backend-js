@@ -5,6 +5,9 @@ const app = express();
 app.use(express.json())
 
 app.get('/get', function(req, res){
+    console.log(req.headers);
+    
+    res.header({"my-header": "This is my custom header"})
     res.json({
         "METHOD": "GET",
         "use": "It allows to get information",
