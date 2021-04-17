@@ -29,5 +29,5 @@ app.delete('/delete', function(req,res){
     response.success(req, res, 'Congratulations, you committed a DELETE method')
 })
 
-
+app.use('/app',express.static('public'))
 app.listen(PORT, console.log(`Listening Port : http://localhost:${PORT}`))
