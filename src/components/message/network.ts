@@ -2,22 +2,29 @@
 import express, { Application, Request, Response, NextFunction }from 'express'
 import { addMessage }  from './controller'
 import { successResponse, errorResponse } from '../../network/response'
+import { store } from './store'
 
 
 const messages = express.Router();
 
 // routes
 messages.get('/get', (req:Request, res:Response) => {
-    console.log(req.header);
+    return new Promise((resolve, reject) => {
+        if(!store.readAll){
+            return reject(new Error('There is no messages'))
+        }
 
-    res.header({"my-header": "This is a custom header"});
-    successResponse(req, res, 'I got the body 👀')
+        res.header({"my-header": "This is a custom header"})
+
+        successResponse(req, res, store.readAll(), 201)
+    })
 })
 
  messages.post('/post', async (req:Request, res:Response) => {
     const {user, message} = req.body
     try{
         const fullMessage = await addMessage(user, message)
+        store.add(fullMessage)
         successResponse(req, res, fullMessage, 201)
     }
     catch(error){

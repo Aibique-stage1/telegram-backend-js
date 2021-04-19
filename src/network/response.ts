@@ -1,12 +1,7 @@
 import {Request, Response, NextFunction} from 'express'
+import { FullMessage } from '../types'
 
-interface FullMessage {
-    user: string,
-    message: string,
-    date: Date
-}
-Promise
-export const successResponse = (req: Request, res: Response, message?: string | FullMessage, status?:number) => {
+export const successResponse = (req: Request, res: Response, message?: string | FullMessage[] | FullMessage, status?:number) => {
 
     res.status(status || 200).send({
         error:"",
