@@ -1,6 +1,6 @@
 // It does match the routes and connects the controllers 
 import express, { Application, Request, Response, NextFunction }from 'express'
-import { addMessage }  from './controller'
+import { addMessage, readMessages }  from './controller'
 import { successResponse, errorResponse } from '../../network/response'
 import { store } from './store'
 
@@ -8,23 +8,22 @@ import { store } from './store'
 const messages = express.Router();
 
 // routes
-messages.get('/get', (req:Request, res:Response) => {
-    return new Promise((resolve, reject) => {
-        if(!store.readAll){
-            return reject(new Error('There is no messages'))
-        }
+messages.get('/get', async (req:Request, res:Response) => {
+    try{
+        const allMessages = await readMessages();
+        
+        res.header({"my-header": "This a custom header"})
 
-        res.header({"my-header": "This is a custom header"})
-
-        successResponse(req, res, store.readAll(), 201)
-    })
+        successResponse(req, res, allMessages, 201)
+    }catch(error){
+        console.error(error.message)
+    }
 })
 
  messages.post('/post', async (req:Request, res:Response) => {
     const {user, message} = req.body
     try{
         const fullMessage = await addMessage(user, message)
-        store.add(fullMessage)
         successResponse(req, res, fullMessage, 201)
     }
     catch(error){

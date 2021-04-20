@@ -1,9 +1,6 @@
-
-interface FullMessage {
-    user: string,
-    message: string,
-    date: Date
-}
+import { store } from './store'
+import { FullMessage } from '../../types'
+import { resolve } from 'node:path'
 
 export const addMessage = (user: string, message: string): Promise<FullMessage> => {
 
@@ -16,6 +13,17 @@ export const addMessage = (user: string, message: string): Promise<FullMessage> 
             message,
             date: new Date()
         }
+        store.add(fullMessage)
         return response(fullMessage)
+    })
+}
+
+export const readMessages = ():Promise<string> => {
+    return new Promise((response, reject) => {
+        if(!store.readAll){
+            reject(new Error('No Data in the Database'))
+        }
+        response(store.readAll())
+
     })
 }
