@@ -1,8 +1,7 @@
 // It does match the routes and connects the controllers 
 import express, { Application, Request, Response, NextFunction }from 'express'
-import { addMessage, readMessages }  from './controller'
+import { addMessage, readMessages, patchMessage }  from './controller'
 import { successResponse, errorResponse } from '../../network/response'
-import { store } from './store'
 
 
 const messages = express.Router();
@@ -31,7 +30,17 @@ messages.get('/get', async (req:Request, res:Response) => {
     }
 })
 
- messages.put('/put', (req: Request, res:Response) => {
+ messages.patch('/patch/:id', async (req: Request, res:Response) => {
+     const { id } = req.params;
+     const { message: text } = req.body;
+      
+     try{
+         const newMessage = await patchMessage(id, text);
+
+         successResponse(req, res, newMessage, 200)
+     }catch(error){
+         errorResponse(req, res, error.message, 500);
+     }
     successResponse(req, res, 'You commit a PUT method, Congratulations! ')
 })
 

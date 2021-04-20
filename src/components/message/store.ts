@@ -1,5 +1,5 @@
 import {FullMessage} from '../../types'
-import db from 'mongoose'
+import db, { model } from 'mongoose'
 import { Model } from './model'
 import * as dotenv from 'dotenv'
 
@@ -19,15 +19,25 @@ const addMessage = (message: FullMessage) => {
 
 }
 
-// It doesn't work ❌
+// It doesn't work ✅
 const readMessages = async() => {
     const allMessages = await Model.find();
     return allMessages;
 }
 
+// It doesn't work
+const patchMessage = async(id:number | string , message:string) => {
+    const foundMessage = await Model.findOne({_id: id});
+    foundMessage.message = message;
+    const newMessage = await foundMessage.save();
+
+    return newMessage;
+}
+
 export const store = {
     add: addMessage,
     readAll: readMessages,
+    patchOne: patchMessage,
     //readOne
     //deleteOne
 }

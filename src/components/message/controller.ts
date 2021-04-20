@@ -27,3 +27,13 @@ export const readMessages = ():Promise<string> => {
 
     })
 }
+
+export const patchMessage = (id: number | string, text: string):Promise<string> => {
+    return new Promise((resolve, reject) => {
+        if(!id || !text){
+            return reject(new Error('No id or message provided'))
+        }
+
+        resolve(store.patchOne(id, text));
+    })
+}
