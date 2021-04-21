@@ -1,30 +1,31 @@
 // It does match the routes and connects the controllers 
 import express, { Application, Request, Response, NextFunction }from 'express'
-import { addMessage }  from './controller'
+import { addMessage, readMessages, patchMessage, deleteMessage }  from './controller'
 import { successResponse, errorResponse } from '../../network/response'
-import { store } from './store'
 
 
 const messages = express.Router();
 
 // routes
-messages.get('/get', (req:Request, res:Response) => {
-    return new Promise((resolve, reject) => {
-        if(!store.readAll){
-            return reject(new Error('There is no messages'))
-        }
+messages.get('/get', async (req:Request, res:Response) => {
+    try{
+        const { user: theUser } = req.query;
+        const filter = theUser ? {user: theUser} : {};
 
-        res.header({"my-header": "This is a custom header"})
+        const allMessages = await readMessages(filter);
+        
+        res.header({"my-header": "This a custom header"})
 
-        successResponse(req, res, store.readAll(), 201)
-    })
+        successResponse(req, res, allMessages, 201)
+    }catch(error){
+        console.error(error.message)
+    }
 })
 
  messages.post('/post', async (req:Request, res:Response) => {
     const {user, message} = req.body
     try{
         const fullMessage = await addMessage(user, message)
-        store.add(fullMessage)
         successResponse(req, res, fullMessage, 201)
     }
     catch(error){
@@ -32,12 +33,28 @@ messages.get('/get', (req:Request, res:Response) => {
     }
 })
 
- messages.put('/put', (req: Request, res:Response) => {
+ messages.patch('/patch/:id', async (req: Request, res:Response) => {
+     const { id } = req.params;
+     const { message: text } = req.body;
+      
+     try{
+         const newMessage = await patchMessage(id, text);
+
+         successResponse(req, res, newMessage, 200)
+     }catch(error){
+         errorResponse(req, res, error.message, 500);
+     }
     successResponse(req, res, 'You commit a PUT method, Congratulations! ')
 })
 
- messages.delete('/delete', (req:Request, res:Response) => {
-    successResponse(req, res, 'You committed a DELETE method, very sad!')
+ messages.delete('/delete/:id', async (req:Request, res:Response) => {
+     try{
+         const {id} = req.params;
+         const deletedMessage = await deleteMessage(id);
+         successResponse(req, res, `${deletedMessage} [DELETED] `, 200)
+     }catch(error){
+         errorResponse(req, res, error.message, 500)
+     }
 })
 
 
