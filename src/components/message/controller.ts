@@ -1,6 +1,5 @@
 import { store } from './store'
-import { FullMessage } from '../../types'
-import { resolve } from 'node:path'
+import { Empty, FullMessage, TheUser } from '../../types'
 
 export const addMessage = (user: string, message: string): Promise<FullMessage> => {
 
@@ -18,12 +17,12 @@ export const addMessage = (user: string, message: string): Promise<FullMessage> 
     })
 }
 
-export const readMessages = ():Promise<string> => {
+export const readMessages = (theUser: TheUser | Empty ):Promise<string> => {
     return new Promise((response, reject) => {
         if(!store.readAll){
             reject(new Error('No Data in the Database'))
         }
-        response(store.readAll())
+        response(store.readAll(theUser))
 
     })
 }

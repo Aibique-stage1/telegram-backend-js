@@ -1,4 +1,4 @@
-import {FullMessage} from '../../types'
+import {Empty, FullMessage, TheUser} from '../../types'
 import db, { model } from 'mongoose'
 import { Model } from './model'
 import * as dotenv from 'dotenv'
@@ -12,20 +12,25 @@ if(!process.env.DB_URI){
 db.Promise = global.Promise;
 db.connect(process.env.DB_URI, { useNewUrlParser: true , useUnifiedTopology: true });
 
-// It works ! ✅
+//✅
 const addMessage = (message: FullMessage) => {
     const theMessage = new Model(message);
     theMessage.save();    
 
 }
 
-// It doesn't work ✅
-const readMessages = async() => {
-    const allMessages = await Model.find();
-    return allMessages;
+//✅
+const readMessages = async(theUser: Empty | TheUser) => {
+    try{
+        const allMessages = await Model.find(theUser);
+        return allMessages;
+
+    }catch(error){
+        console.error(error)
+    }
 }
 
-// It doesn't work
+//✅
 const patchMessage = async(id:number | string , message:string) => {
     const foundMessage = await Model.findOne({_id: id});
     foundMessage.message = message;

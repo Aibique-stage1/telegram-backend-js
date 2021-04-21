@@ -9,7 +9,10 @@ const messages = express.Router();
 // routes
 messages.get('/get', async (req:Request, res:Response) => {
     try{
-        const allMessages = await readMessages();
+        const { user: theUser } = req.query;
+        const filter = theUser ? {user: theUser} : {};
+
+        const allMessages = await readMessages(filter);
         
         res.header({"my-header": "This a custom header"})
 
