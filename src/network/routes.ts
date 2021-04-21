@@ -1,10 +1,12 @@
 import { Application } from "express";
 
-// It manages de directions of the Petitions and re-directs to the right component
-// import messages from '../components/message/network'
 import messages from '../components/message/network'
+import users from '../components/users/network';
+import chat from '../components/chat/network'
 
 export const messageRoute = (server: Application) => {
-    server.use('/message', messages);
+    server.use('/messages', messages);
+    server.use('/users', users);
+    server.use('/chat', chat);
 }
 

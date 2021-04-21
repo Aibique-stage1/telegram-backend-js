@@ -1,6 +1,8 @@
 import {Empty, FullMessage, TheUser} from '../../types'
 import { Model } from './model'
 
+// 🧺
+
 
 //✅
 const addMessage = (message: FullMessage) => {
@@ -11,7 +13,7 @@ const addMessage = (message: FullMessage) => {
 //✅
 const readMessages = async(theUser: Empty | TheUser) => {
     try{
-        const allMessages = await Model.find(theUser);
+        const allMessages = await Model.find(theUser).populate('user').exec();
         return allMessages;
 
     }catch(error){

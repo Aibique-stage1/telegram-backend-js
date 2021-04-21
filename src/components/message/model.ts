@@ -1,8 +1,13 @@
 import {Schema, model} from 'mongoose'
 
 
+
+// 🧨
 const mySchema = new Schema({
-    user: String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+    },
     message: String,
     date: Date,
 }, {collection: 'messages'});

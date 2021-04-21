@@ -1,6 +1,8 @@
 import { store } from './store'
 import { Empty, FullMessage, TheUser } from '../../types'
 
+// 🕹️
+
 export const addMessage = (user: string, message: string): Promise<FullMessage> => {
 
     return new Promise((response, reject) => {
