@@ -39,10 +39,18 @@ const patchMessage = async(id:number | string , message:string) => {
     return newMessage;
 }
 
+const deleteMessage = async(id: number | string) => {
+    const message = await Model.findOne({_id: id});
+    const deletedMessage = message.message;
+    await Model.deleteOne({_id: id})
+
+    return deletedMessage;
+}
+
 export const store = {
     add: addMessage,
     readAll: readMessages,
     patchOne: patchMessage,
     //readOne
-    //deleteOne
+    deleteOne: deleteMessage,
 }

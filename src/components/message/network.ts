@@ -1,6 +1,6 @@
 // It does match the routes and connects the controllers 
 import express, { Application, Request, Response, NextFunction }from 'express'
-import { addMessage, readMessages, patchMessage }  from './controller'
+import { addMessage, readMessages, patchMessage, deleteMessage }  from './controller'
 import { successResponse, errorResponse } from '../../network/response'
 
 
@@ -47,8 +47,14 @@ messages.get('/get', async (req:Request, res:Response) => {
     successResponse(req, res, 'You commit a PUT method, Congratulations! ')
 })
 
- messages.delete('/delete', (req:Request, res:Response) => {
-    successResponse(req, res, 'You committed a DELETE method, very sad!')
+ messages.delete('/delete/:id', async (req:Request, res:Response) => {
+     try{
+         const {id} = req.params;
+         const deletedMessage = await deleteMessage(id);
+         successResponse(req, res, `${deletedMessage} [DELETED] `, 200)
+     }catch(error){
+         errorResponse(req, res, error.message, 500)
+     }
 })
 
 

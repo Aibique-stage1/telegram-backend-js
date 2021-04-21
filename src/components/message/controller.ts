@@ -36,3 +36,13 @@ export const patchMessage = (id: number | string, text: string):Promise<string> 
         resolve(store.patchOne(id, text));
     })
 }
+
+export const deleteMessage = (id: number | string): Promise<string> =>  {
+    return new Promise((resolve, reject) => {
+        if(!id){
+            return reject(new Error('No ID provided'))
+        }
+
+        resolve(store.deleteOne(id));
+    })
+}
