@@ -3,7 +3,7 @@ import { Empty, FullMessage, TheUser } from '../../types';
 
 // 🕹️
 
-export const addMessage = (chat: string, user: string, message: string): Promise<FullMessage> => {
+export const addMessage = (chat: string, user: string, message: string, fileUrl: string): Promise<FullMessage> => {
     return new Promise((response, reject) => {
         if (!user || !message || !chat) {
             return reject(new Error('No user or message provided'));
@@ -13,6 +13,7 @@ export const addMessage = (chat: string, user: string, message: string): Promise
             user,
             message,
             date: new Date(),
+            file: fileUrl,
         };
         store.add(fullMessage);
         return response(fullMessage);

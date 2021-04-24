@@ -1,9 +1,13 @@
 import express, { Request, Response } from 'express';
+import multer from 'multer';
 
 import { addMessage, readMessages, patchMessage, deleteMessage } from './controller';
 import { successResponse, errorResponse } from '../../network/response';
 
 const messages = express.Router();
+const upload = multer({
+    dest: 'public/files',
+});
 
 // 🕸️
 messages.get('/', async (req: Request, res: Response) => {
@@ -23,10 +27,12 @@ messages.get('/', async (req: Request, res: Response) => {
 });
 
 // 🕸️
-messages.post('/', async (req: Request, res: Response) => {
+messages.post('/', upload.single('file'), async (req: Request, res: Response) => {
     try {
         const { chat, user, message } = req.body;
-        const fullMessage = await addMessage(chat, user, message);
+        console.log(req.file);
+        const fileUrl = req.file ? `http://localhost:3000/app/files/${req.file.filename}` : '';
+        const fullMessage = await addMessage(chat, user, message, fileUrl);
 
         successResponse(req, res, fullMessage, 201);
     } catch (error) {

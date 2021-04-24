@@ -5,6 +5,7 @@ export interface FullMessage {
     age?: number;
     message?: string;
     date?: Date;
+    file?: string | { filename: string };
 }
 
 export interface Empty {}

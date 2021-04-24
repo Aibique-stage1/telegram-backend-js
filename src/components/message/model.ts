@@ -17,6 +17,7 @@ const mySchema = new Schema(
         ],
         message: String,
         date: Date,
+        file: String,
     },
     { collection: 'messages' },
 );
