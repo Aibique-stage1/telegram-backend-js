@@ -1,4 +1,5 @@
 export interface FullMessage {
+    chat?: string;
     user?: string;
     name?: string;
     age?: number;

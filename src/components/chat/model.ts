@@ -10,7 +10,7 @@ const mySchema = new Schema(
             },
         ],
     },
-    { collection: 'chat' },
+    { collection: 'chats' },
 );
 
-export const Model = model('chat', mySchema);
+export const Model = model('chats', mySchema);
