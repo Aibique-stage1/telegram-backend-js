@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from 'express'
+import {Request, Response} from 'express'
 import { FullMessage } from '../types'
 
 export const successResponse = (req: Request, res: Response, message?: string | FullMessage[] | FullMessage | Promise<any> , status?:number) => {
