@@ -1,5 +1,6 @@
+import { response } from 'express';
 import { resolve } from 'node:path';
-import { User, Users } from '../../types';
+import { Empty, User, Users } from '../../types';
 import { store } from './store';
 
 export const postChat = (users: string[]): Promise<Users> => {
@@ -13,8 +14,6 @@ export const postChat = (users: string[]): Promise<Users> => {
     return store.addChat(chat);
 };
 
-export const getChat = (userId: string): Promise<User[]> => {
-    if (!userId) return Promise.reject(new Error('No user ID provided'));
-
+export const getChat = async (userId: Empty | { users: string }) => {
     return store.getChat(userId);
 };

@@ -1,6 +1,6 @@
 import { rejects } from 'node:assert';
 import { resolve } from 'node:path';
-import { User, Users } from '../../types';
+import { Empty, User, Users } from '../../types';
 import { Model } from './model';
 
 const addChat = (chat: Users) => {
@@ -10,15 +10,12 @@ const addChat = (chat: Users) => {
     return newChat;
 };
 
-const getChat = async (userId: string) => {
+const getChat = async (userId: Empty | { users: string }) => {
     try {
-        const filter = userId ? { users: userId } : {};
-
-        const theChat = await Model.find({ filter }).populate('users').exec();
-
-        return theChat;
+        const answer = await Model.find(userId).populate('users').exec();
+        return answer;
     } catch (err) {
-        return console.error(err);
+        return err;
     }
 };
 

@@ -14,12 +14,12 @@ chat.post('/', (req, res) => {
 });
 
 chat.get('/:userId', (req, res) => {
-    try {
-        const { userId } = req.params;
-        successResponse(req, res, getChat(userId), 200);
-    } catch (error) {
-        errorResponse(req, res, error.message, 500);
-    }
+    const { userId } = req.params;
+    let filter = userId ? { users: userId } : {};
+
+    getChat(filter)
+        .then((answer) => successResponse(req, res, answer, 200))
+        .catch((err) => errorResponse(req, res, err.message, 500));
 });
 
 export default chat;
