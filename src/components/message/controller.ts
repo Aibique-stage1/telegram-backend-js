@@ -1,5 +1,7 @@
 import { store } from './store';
 import { Empty, FullMessage, TheUser } from '../../types';
+import { socket } from '../../socket';
+import { Socket } from 'socket.io';
 
 // 🕹️
 
@@ -16,6 +18,16 @@ export const addMessage = (chat: string, user: string, message: string, fileUrl:
             file: fileUrl,
         };
         store.add(fullMessage);
+
+        // socket.io.on('connect', (client: Socket) => {
+        //     console.log('user connected');
+        //     client.on('messages', () => {
+        //         socket.io.emit('messages', fullMessage);
+        //     });
+        // });
+
+        socket.io.emit('messages', fullMessage);
+
         return response(fullMessage);
     });
 };
